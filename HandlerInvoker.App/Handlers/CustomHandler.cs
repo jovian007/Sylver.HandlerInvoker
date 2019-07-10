@@ -1,8 +1,5 @@
 ﻿using HandlerInvoker.App.Common;
 using HandlerInvoker.Core.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HandlerInvoker.App.Handlers
 {
@@ -11,11 +8,15 @@ namespace HandlerInvoker.App.Handlers
     {
         public CustomHandler()
         {
-
         }
 
         [HandlerAction(HandlerActionType.CreateUser)]
         public void MyFirstHandlerAction()
+        {
+        }
+
+        [HandlerAction(HandlerActionType.ShowUser)]
+        public void MySecondHandlerAction()
         {
         }
     }

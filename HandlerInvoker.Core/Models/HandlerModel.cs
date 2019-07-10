@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace HandlerInvoker.Core.Models
 {
-    internal sealed class HandlerModel
+    internal class HandlerModel
     {
+        public string Name { get; }
+
         public TypeInfo TypeInfo { get; }
 
         public IList<HandlerActionModel> Actions { get; }
 
-        public HandlerModel(TypeInfo handlerType)
+        public HandlerModel(TypeInfo handlerType, IEnumerable<HandlerActionModel> actions)
         {
+            this.Name = handlerType.Name;
             this.TypeInfo = handlerType;
-            this.Actions = new List<HandlerActionModel>();
+            this.Actions = new List<HandlerActionModel>(actions);
         }
     }
 }
