@@ -1,12 +1,16 @@
-﻿using System;
+﻿using HandlerInvoker.ConsoleHost;
+using Microsoft.Extensions.Hosting;
+using System.Threading.Tasks;
 
 namespace HandlerInvoker.App
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main()
         {
-            Console.WriteLine("Hello World!");
+            IHost consoleHost = new ConsoleHostBuilder().Build();
+
+            await consoleHost.RunAsync();
         }
     }
 }

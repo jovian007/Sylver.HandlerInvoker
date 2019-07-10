@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HandlerInvoker.ConsoleHost\HandlerInvoker.ConsoleHost.csproj" />
     <ProjectReference Include="..\HandlerInvoker.Core\HandlerInvoker.Core.csproj" />
   </ItemGroup>
 
