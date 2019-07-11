@@ -13,16 +13,16 @@ namespace HandlerInvoker.Core.Services
 
     internal sealed class HandlerInvokerService : IHandlerInvokerService
     {
-        private readonly HandlerInvokerCache _invokerCache;
+        private readonly HandlerActionInvokerCache _invokerCache;
 
-        public HandlerInvokerService(HandlerInvokerCache invokerCache)
+        public HandlerInvokerService(HandlerActionInvokerCache invokerCache)
         {
             this._invokerCache = invokerCache;
         }
 
         public void Invoke(object handlerAction, params object[] args)
         {
-            throw new NotImplementedException();
+            HandlerActionInvokerCacheEntry handlerActionExecutor = this._invokerCache.GetCachedHandlerAction(handlerAction);
         }
 
         public Task InvokeAsync(object handlerAction, params object[] args)

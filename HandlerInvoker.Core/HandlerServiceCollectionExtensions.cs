@@ -15,29 +15,38 @@ namespace HandlerInvoker.Core
     {
         public static void AddHandlers(this IServiceCollection services)
         {
-            services.TryAddSingleton<IHandlerCache>(s => HandlerCacheFactory());
-            services.TryAddSingleton<HandlerInvokerCache>();
+            services.TryAddSingleton<IHandlerActionCache>(s => HandlerCacheFactory());
+            services.TryAddSingleton<HandlerActionInvokerCache>();
             services.TryAddSingleton<IHandlerInvokerService, HandlerInvokerService>();
+
+            services.TryAddSingleton<ITypeActivatorCache, TypeActivatorCache>();
         }
 
-        private static HandlerCache HandlerCacheFactory()
+        private static HandlerActionCache HandlerCacheFactory()
         {
-            var handlerCacheEntries = new Dictionary<Type, HandlerModel>();
+            var handlerCacheEntries = new Dictionary<object, HandlerActionModel>();
             IEnumerable<Type> handlers = from x in Assembly.GetEntryAssembly().GetTypes()
                                          where x.GetCustomAttributes<HandlerAttribute>().Any()
                                          select x;
 
             foreach (Type handlerType in handlers)
             {
+                TypeInfo handlerTypeInfo = handlerType.GetTypeInfo();
                 IEnumerable<HandlerActionModel> handlerActions = from x in handlerType.GetMethods(BindingFlags.Instance | BindingFlags.Public)
                                                                  let attribute = x.GetCustomAttribute<HandlerActionAttribute>()
                                                                  where attribute != null
-                                                                 select new HandlerActionModel(attribute.Action, x);
+                                                                 select new HandlerActionModel(attribute.Action, x, handlerTypeInfo);
 
-                handlerCacheEntries.Add(handlerType, new HandlerModel(handlerType.GetTypeInfo(), handlerActions));
+                foreach (HandlerActionModel handlerAction in handlerActions)
+                {
+                    if (!handlerCacheEntries.ContainsKey(handlerAction.ActionType))
+                    {
+                        handlerCacheEntries.Add(handlerAction.ActionType, handlerAction);
+                    }
+                }
             }
 
-            return new HandlerCache(handlerCacheEntries);
+            return new HandlerActionCache(handlerCacheEntries);
         }
     }
 }
