@@ -1,5 +1,5 @@
-﻿using HandlerInvoker.Core.Models;
-using Microsoft.Extensions.DependencyInjection;
+﻿using HandlerInvoker.Core.Handlers;
+using HandlerInvoker.Core.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,14 +9,14 @@ namespace HandlerInvoker.Core.Internal
     internal sealed class HandlerActionInvokerCache : IDisposable
     {
         private readonly IDictionary<object, HandlerActionInvokerCacheEntry> _cache;
-        private readonly IServiceProvider _serviceProvider;
         private readonly IHandlerActionCache _handlerCache;
+        private readonly IHandlerFactory _handlerFactory;
 
-        public HandlerActionInvokerCache(IServiceProvider serviceProvider, IHandlerActionCache handlerCache)
+        public HandlerActionInvokerCache(IHandlerActionCache handlerCache, IHandlerFactory handlerFactory)
         {
             this._cache = new ConcurrentDictionary<object, HandlerActionInvokerCacheEntry>();
-            this._serviceProvider = serviceProvider;
             this._handlerCache = handlerCache;
+            this._handlerFactory = handlerFactory;
         }
 
         public HandlerActionInvokerCacheEntry GetCachedHandlerAction(object handlerAction)
@@ -30,11 +30,11 @@ namespace HandlerInvoker.Core.Internal
                     throw new ArgumentNullException(nameof(handlerActionModel));
                 }
 
-                object handlerFactory = null;
-
-                cacheEntry = new HandlerActionInvokerCacheEntry();
-
-                // TODO: Create executor
+                cacheEntry = new HandlerActionInvokerCacheEntry(
+                    handlerActionModel.HandlerTypeInfo.AsType(),
+                    this._handlerFactory.CreateHandler, 
+                    this._handlerFactory.ReleaseHandler,
+                    new HandlerExecutor(handlerActionModel.HandlerTypeInfo, handlerActionModel.Method, null));
 
                 this._cache.Add(handlerAction, cacheEntry);
             }
@@ -44,14 +44,26 @@ namespace HandlerInvoker.Core.Internal
 
         public void Dispose()
         {
+            this._cache.Clear();
         }
     }
 
     internal class HandlerActionInvokerCacheEntry
     {
-        internal HandlerActionInvokerCacheEntry()
-        {
+        public Type HandlerType { get; }
 
+        public Func<Type, object> HandlerFactory { get; }
+
+        public Action<object> HandlerReleaser { get; }
+
+        public HandlerExecutor HandlerExecutor { get; }
+
+        internal HandlerActionInvokerCacheEntry(Type handlerType, Func<Type, object> handlerFactory, Action<object> handlerReleaser, HandlerExecutor handlerExecutor)
+        {
+            this.HandlerType = handlerType;
+            this.HandlerFactory = handlerFactory;
+            this.HandlerReleaser = handlerReleaser;
+            this.HandlerExecutor = handlerExecutor;
         }
     }
 }

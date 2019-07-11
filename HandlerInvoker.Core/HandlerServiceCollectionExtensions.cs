@@ -1,4 +1,5 @@
 ﻿using HandlerInvoker.Core.Attributes;
+using HandlerInvoker.Core.Handlers;
 using HandlerInvoker.Core.Internal;
 using HandlerInvoker.Core.Models;
 using HandlerInvoker.Core.Services;
@@ -18,6 +19,7 @@ namespace HandlerInvoker.Core
             services.TryAddSingleton<IHandlerActionCache>(s => HandlerCacheFactory());
             services.TryAddSingleton<HandlerActionInvokerCache>();
             services.TryAddSingleton<IHandlerInvokerService, HandlerInvokerService>();
+            services.TryAddSingleton<IHandlerFactory, HandlerFactory>();
 
             services.TryAddSingleton<ITypeActivatorCache, TypeActivatorCache>();
         }

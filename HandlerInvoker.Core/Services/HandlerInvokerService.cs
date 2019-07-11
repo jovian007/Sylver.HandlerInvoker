@@ -22,7 +22,21 @@ namespace HandlerInvoker.Core.Services
 
         public void Invoke(object handlerAction, params object[] args)
         {
-            HandlerActionInvokerCacheEntry handlerActionExecutor = this._invokerCache.GetCachedHandlerAction(handlerAction);
+            HandlerActionInvokerCacheEntry handlerActionInvoker = this._invokerCache.GetCachedHandlerAction(handlerAction);
+
+            if (handlerActionInvoker == null)
+            {
+                throw new ArgumentNullException(nameof(handlerActionInvoker));
+            }
+
+            var targetHandler = handlerActionInvoker.HandlerFactory(handlerActionInvoker.HandlerType);
+
+            if (targetHandler == null)
+            {
+                throw new ArgumentNullException(nameof(targetHandler));
+            }
+
+            handlerActionInvoker.HandlerExecutor.Execute(targetHandler, args);
         }
 
         public Task InvokeAsync(object handlerAction, params object[] args)
