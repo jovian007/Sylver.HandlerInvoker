@@ -4,23 +4,24 @@ using System.Threading.Tasks;
 
 namespace HandlerInvoker.Core.Services
 {
-    public interface IHandlerInvokerService
-    {
-        void Invoke(object handlerAction, params object[] args);
-
-        Task InvokeAsync(object handlerAction, params object[] args);
-    }
-
-    internal sealed class HandlerInvokerService : IHandlerInvokerService
+    /// <summary>
+    /// Provides methods to invoke a handler action.
+    /// </summary>
+    internal sealed class HandlerInvoker : IHandlerInvoker
     {
         private readonly HandlerActionInvokerCache _invokerCache;
 
-        public HandlerInvokerService(HandlerActionInvokerCache invokerCache)
+        /// <summary>
+        /// Creates a new <see cref="HandlerInvoker"/> instance.
+        /// </summary>
+        /// <param name="invokerCache">Handler action invoker cache.</param>
+        public HandlerInvoker(HandlerActionInvokerCache invokerCache)
         {
             this._invokerCache = invokerCache;
         }
 
-        public void Invoke(object handlerAction, params object[] args)
+        /// <inheritdoc />
+        public object Invoke(object handlerAction, params object[] args)
         {
             HandlerActionInvokerCacheEntry handlerActionInvoker = this._invokerCache.GetCachedHandlerAction(handlerAction);
 
@@ -36,9 +37,25 @@ namespace HandlerInvoker.Core.Services
                 throw new ArgumentNullException(nameof(targetHandler));
             }
 
-            handlerActionInvoker.HandlerExecutor.Execute(targetHandler, args);
+            object handlerResult = null;
+
+            try
+            {
+                handlerResult = handlerActionInvoker.HandlerExecutor.Execute(targetHandler, args);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                handlerActionInvoker.HandlerReleaser(targetHandler);
+            }
+
+            return handlerResult;
         }
 
+        /// <inheritdoc />
         public Task InvokeAsync(object handlerAction, params object[] args)
         {
             throw new NotImplementedException();

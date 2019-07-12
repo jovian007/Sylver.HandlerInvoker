@@ -1,4 +1,5 @@
 ﻿using HandlerInvoker.App.Common;
+using HandlerInvoker.App.Services;
 using HandlerInvoker.ConsoleHost;
 using HandlerInvoker.Core;
 using HandlerInvoker.Core.Services;
@@ -25,6 +26,7 @@ namespace HandlerInvoker.App
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHandlers();
+                    services.AddTransient<IDefaultService, DefaultService>();
                     services.AddSingleton<IHostedService, ConsoleHostedService>();
                 })
                 .UseConsoleLifetime()
@@ -37,9 +39,9 @@ namespace HandlerInvoker.App
 
     public class ConsoleHostedService : IHostedService, IDisposable
     {
-        private readonly IHandlerInvokerService _handlerInvoker;
+        private readonly IHandlerInvoker _handlerInvoker;
 
-        public ConsoleHostedService(IHandlerInvokerService handlerInvoker)
+        public ConsoleHostedService(IHandlerInvoker handlerInvoker)
         {
             this._handlerInvoker = handlerInvoker;
         }

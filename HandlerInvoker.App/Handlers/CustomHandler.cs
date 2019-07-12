@@ -1,28 +1,29 @@
 ﻿using HandlerInvoker.App.Common;
+using HandlerInvoker.App.Services;
 using HandlerInvoker.Core.Attributes;
-using System;
 
 namespace HandlerInvoker.App.Handlers
 {
     [Handler]
     public sealed class CustomHandler
     {
-        public int Test { get; }
+        private readonly IDefaultService _defaultService;
 
-        public CustomHandler()
+        public CustomHandler(IDefaultService defaultService)
         {
+            this._defaultService = defaultService;
         }
 
         [HandlerAction(HandlerActionType.CreateUser)]
         public void MyFirstHandlerAction(int index)
         {
-            Console.WriteLine($"MyFirstHandlerAction({index})");
+            this._defaultService.Print($"MyFirstHandlerAction({index})");
         }
 
         [HandlerAction(HandlerActionType.ShowUser)]
         public void MySecondHandlerAction()
         {
-            Console.WriteLine("MySecondHandlerAction()");
+            this._defaultService.Print("MySecondHandlerAction()");
         }
     }
 }

@@ -12,6 +12,11 @@ namespace HandlerInvoker.Core.Internal
         private readonly IHandlerActionCache _handlerCache;
         private readonly IHandlerFactory _handlerFactory;
 
+        /// <summary>
+        /// Creates a new <see cref="HandlerActionInvokerCache"/> instance.
+        /// </summary>
+        /// <param name="handlerCache">Handler action cache.</param>
+        /// <param name="handlerFactory">Handler factory.</param>
         public HandlerActionInvokerCache(IHandlerActionCache handlerCache, IHandlerFactory handlerFactory)
         {
             this._cache = new ConcurrentDictionary<object, HandlerActionInvokerCacheEntry>();
@@ -19,6 +24,19 @@ namespace HandlerInvoker.Core.Internal
             this._handlerFactory = handlerFactory;
         }
 
+        /// <summary>
+        /// Gets a <see cref="HandlerActionInvokerCacheEntry"/> based on a handler action.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="HandlerActionInvokerCacheEntry"/> contains the handler factory creator 
+        /// and the handler action executor.
+        /// </remarks>
+        /// <param name="handlerAction">Handler action.</param>
+        /// <returns>
+        /// Existing <see cref="HandlerActionInvokerCacheEntry"/> in cache; 
+        /// if the entry doesn't exist, it creates a new <see cref="HandlerActionInvokerCacheEntry"/>, 
+        /// caches it and returns it.
+        /// </returns>
         public HandlerActionInvokerCacheEntry GetCachedHandlerAction(object handlerAction)
         {
             if (!this._cache.TryGetValue(handlerAction, out HandlerActionInvokerCacheEntry cacheEntry))
@@ -42,28 +60,12 @@ namespace HandlerInvoker.Core.Internal
             return cacheEntry;
         }
 
+        /// <summary>
+        /// Dispose the <see cref="HandlerActionInvokerCache"/> resources.
+        /// </summary>
         public void Dispose()
         {
             this._cache.Clear();
-        }
-    }
-
-    internal class HandlerActionInvokerCacheEntry
-    {
-        public Type HandlerType { get; }
-
-        public Func<Type, object> HandlerFactory { get; }
-
-        public Action<object> HandlerReleaser { get; }
-
-        public HandlerExecutor HandlerExecutor { get; }
-
-        internal HandlerActionInvokerCacheEntry(Type handlerType, Func<Type, object> handlerFactory, Action<object> handlerReleaser, HandlerExecutor handlerExecutor)
-        {
-            this.HandlerType = handlerType;
-            this.HandlerFactory = handlerFactory;
-            this.HandlerReleaser = handlerReleaser;
-            this.HandlerExecutor = handlerExecutor;
         }
     }
 }

@@ -1,22 +1,22 @@
 ﻿using HandlerInvoker.Core.Internal;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace HandlerInvoker.Core.Handlers
+namespace HandlerInvoker.Core.Handlers.Internal
 {
-    public interface IHandlerFactory
-    {
-        object CreateHandler(Type handlerType);
 
-        void ReleaseHandler(object handler);
-    }
-
+    /// <summary>
+    /// Provides methods to create and release handlers.
+    /// </summary>
     internal sealed class HandlerFactory : IHandlerFactory
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ITypeActivatorCache _typeActivatorCache;
 
+        /// <summary>
+        /// Creates a new <see cref="HandlerFactory"/> instance.
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <param name="typeActivatorCache"></param>
         public HandlerFactory(IServiceProvider serviceProvider, ITypeActivatorCache typeActivatorCache)
         {
             this._serviceProvider = serviceProvider;
@@ -27,9 +27,7 @@ namespace HandlerInvoker.Core.Handlers
         public object CreateHandler(Type handlerType)
         {
             if (handlerType == null)
-            {
                 throw new ArgumentNullException(nameof(handlerType));
-            }
 
             return this._typeActivatorCache.Create<object>(this._serviceProvider, handlerType);
         }
@@ -38,14 +36,10 @@ namespace HandlerInvoker.Core.Handlers
         public void ReleaseHandler(object handler)
         {
             if (handler == null)
-            {
                 throw new ArgumentNullException(nameof(handler));
-            }
 
             if (handler is IDisposable disposableHandler)
-            {
                 disposableHandler.Dispose();
-            }
         }
     }
 }
