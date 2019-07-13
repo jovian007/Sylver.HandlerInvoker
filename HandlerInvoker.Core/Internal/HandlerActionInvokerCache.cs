@@ -1,4 +1,5 @@
 ﻿using HandlerInvoker.Core.Handlers;
+using HandlerInvoker.Core.Helpers;
 using HandlerInvoker.Core.Models;
 using System;
 using System.Collections.Concurrent;
@@ -48,11 +49,13 @@ namespace HandlerInvoker.Core.Internal
                     throw new ArgumentNullException(nameof(handlerActionModel));
                 }
 
+                object[] defaultHandlerActionParameters = ParameterHelper.GetMethodParametersDefaultValues(handlerActionModel.Method);
+
                 cacheEntry = new HandlerActionInvokerCacheEntry(
                     handlerActionModel.HandlerTypeInfo.AsType(),
-                    this._handlerFactory.CreateHandler, 
+                    this._handlerFactory.CreateHandler,
                     this._handlerFactory.ReleaseHandler,
-                    new HandlerExecutor(handlerActionModel.HandlerTypeInfo, handlerActionModel.Method, null));
+                    new HandlerExecutor(handlerActionModel.HandlerTypeInfo, handlerActionModel.Method, defaultHandlerActionParameters));
 
                 this._cache.Add(handlerAction, cacheEntry);
             }

@@ -15,9 +15,11 @@ namespace HandlerInvoker.App.Handlers
         }
 
         [HandlerAction(HandlerActionType.CreateUser)]
-        public void MyFirstHandlerAction(int index)
+        public void MyFirstHandlerAction(int index, TestObject test)
         {
-            this._defaultService.Print($"MyFirstHandlerAction({index})");
+            var isObjectNull = test == null ? "null" : "TestObject()";
+
+            this._defaultService.Print($"MyFirstHandlerAction({index}, {isObjectNull})");
         }
 
         [HandlerAction(HandlerActionType.ShowUser)]
@@ -25,5 +27,10 @@ namespace HandlerInvoker.App.Handlers
         {
             this._defaultService.Print("MySecondHandlerAction()");
         }
+    }
+
+    public class TestObject
+    {
+        public int Test { get; set; }
     }
 }

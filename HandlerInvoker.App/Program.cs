@@ -1,4 +1,5 @@
 ﻿using HandlerInvoker.App.Common;
+using HandlerInvoker.App.Handlers;
 using HandlerInvoker.App.Services;
 using HandlerInvoker.ConsoleHost;
 using HandlerInvoker.Core;

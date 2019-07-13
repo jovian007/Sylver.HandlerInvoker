@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -14,12 +15,16 @@ namespace HandlerInvoker.Core.Handlers
         private readonly object[] _handlerActionDefaultParameters;
         private readonly HandlerMethodExecutor _executor;
 
+        public ParameterInfo[] MethodParameters { get; }
+
         public HandlerExecutor(TypeInfo targetHandlerTypeInfo, MethodInfo handlerActionMethodInfo, object[] defaultParameters)
         {
             this._targetHandlerTypeInfo = targetHandlerTypeInfo;
             this._handlerActionMethodInfo = handlerActionMethodInfo;
             this._handlerActionDefaultParameters = defaultParameters;
             this._executor = this.BuildExecutor();
+
+            this.MethodParameters = handlerActionMethodInfo.GetParameters();
         }
 
         public object Execute(object target, params object[] parameters) => this._executor(target, parameters);
@@ -60,6 +65,16 @@ namespace HandlerInvoker.Core.Handlers
 
                 return Expression.Lambda<HandlerMethodExecutor>(castMethodCall, targetParameter, parametersParameter).Compile();
             }
+        }
+
+        public object GetDefaultValueForParameter(int index)
+        {
+            if (index < 0 || index > this.MethodParameters.Length - 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            return this._handlerActionDefaultParameters[index];
         }
     }
 }

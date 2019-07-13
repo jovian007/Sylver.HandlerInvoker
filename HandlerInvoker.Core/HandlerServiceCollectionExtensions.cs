@@ -19,7 +19,7 @@ namespace HandlerInvoker.Core
         {
             services.TryAddSingleton<IHandlerActionCache>(s => HandlerCacheFactory());
             services.TryAddSingleton<HandlerActionInvokerCache>();
-            services.TryAddSingleton<IHandlerInvoker, HandlerInvoker>();
+            services.TryAddSingleton<IHandlerInvoker, Services.HandlerInvoker>();
             services.TryAddSingleton<IHandlerFactory, HandlerFactory>();
 
             services.TryAddSingleton<ITypeActivatorCache, TypeActivatorCache>();

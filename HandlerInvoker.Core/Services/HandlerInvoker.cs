@@ -1,5 +1,9 @@
-﻿using HandlerInvoker.Core.Internal;
+﻿using HandlerInvoker.Core.Handlers;
+using HandlerInvoker.Core.Internal;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace HandlerInvoker.Core.Services
@@ -41,7 +45,9 @@ namespace HandlerInvoker.Core.Services
 
             try
             {
-                handlerResult = handlerActionInvoker.HandlerExecutor.Execute(targetHandler, args);
+                object[] handlerActionParameters = this.PrepareParameters(args, handlerActionInvoker.HandlerExecutor);
+
+                handlerResult = handlerActionInvoker.HandlerExecutor.Execute(targetHandler, handlerActionParameters);
             }
             catch
             {
@@ -59,6 +65,39 @@ namespace HandlerInvoker.Core.Services
         public Task InvokeAsync(object handlerAction, params object[] args)
         {
             throw new NotImplementedException();
+        }
+
+        private object[] PrepareParameters(object[] parameters, HandlerExecutor executor)
+        {
+            if (!executor.MethodParameters.Any())
+            {
+                return null;
+            }
+
+            var arguments = new object[executor.MethodParameters.Count()];
+
+            for (int i = 0; i < arguments.Length; i++)
+            {
+                ParameterInfo methodParameterInfo = executor.MethodParameters.ElementAt(i);
+
+                if (i < parameters.Length)
+                {
+                    if (parameters[i].GetType() != methodParameterInfo.ParameterType)
+                    {
+                        arguments[i] = executor.GetDefaultValueForParameter(i);
+                    }
+                    else
+                    {
+                        arguments[i] = parameters[i];
+                    }
+                }
+                else
+                {
+                    arguments[i] = executor.GetDefaultValueForParameter(i);
+                }
+            }
+
+            return arguments;
         }
     }
 }
