@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace HandlerInvoker.Core.Services
+namespace HandlerInvoker.Core
 {
     /// <summary>
     /// Provides methods to invoke a handler action.

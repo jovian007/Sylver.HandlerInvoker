@@ -3,7 +3,6 @@ using HandlerInvoker.App.Handlers;
 using HandlerInvoker.App.Services;
 using HandlerInvoker.ConsoleHost;
 using HandlerInvoker.Core;
-using HandlerInvoker.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -56,7 +55,7 @@ namespace HandlerInvoker.App
         {
             Console.WriteLine("StartAsync()");
 
-            this._handlerInvoker.Invoke(HandlerActionType.CreateUser, 10); // Invokes CustomHander.MyFirstHandlerAction()
+            this._handlerInvoker.Invoke(HandlerActionType.CreateUser, 10, null); // Invokes CustomHander.MyFirstHandlerAction()
 
             return Task.CompletedTask;
         }

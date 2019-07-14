@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace HandlerInvoker.Core.Handlers
+namespace HandlerInvoker.Core.Internal
 {
     internal sealed class HandlerExecutor
     {
@@ -37,7 +37,7 @@ namespace HandlerInvoker.Core.Handlers
             var parameters = new List<Expression>();
             ParameterInfo[] parameterInfos = this._handlerActionMethodInfo.GetParameters();
 
-            for (int i = 0; i < parameterInfos.Length; i++)
+            for (var i = 0; i < parameterInfos.Length; i++)
             {
                 ParameterInfo paramInfo = parameterInfos[i];
                 BinaryExpression valueObj = Expression.ArrayIndex(parametersParameter, Expression.Constant(i));
@@ -53,7 +53,7 @@ namespace HandlerInvoker.Core.Handlers
             {
                 var executor = Expression.Lambda<VoidHandlerMethodExecutor>(methodCall, targetParameter, parametersParameter).Compile();
 
-                return (object target, object[] args) =>
+                return (target, args) =>
                 {
                     executor(target, args);
                     return null;
@@ -70,9 +70,7 @@ namespace HandlerInvoker.Core.Handlers
         public object GetDefaultValueForParameter(int index)
         {
             if (index < 0 || index > this.MethodParameters.Length - 1)
-            {
                 throw new ArgumentOutOfRangeException(nameof(index));
-            }
 
             return this._handlerActionDefaultParameters[index];
         }

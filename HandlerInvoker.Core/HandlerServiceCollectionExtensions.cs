@@ -1,9 +1,6 @@
 ﻿using HandlerInvoker.Core.Attributes;
-using HandlerInvoker.Core.Handlers;
-using HandlerInvoker.Core.Handlers.Internal;
 using HandlerInvoker.Core.Internal;
 using HandlerInvoker.Core.Models;
-using HandlerInvoker.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
@@ -15,16 +12,24 @@ namespace HandlerInvoker.Core
 {
     public static class HandlerServiceCollectionExtensions
     {
+        /// <summary>
+        /// Add handlers to the container.
+        /// </summary>
+        /// <param name="services">Service collection container.</param>
         public static void AddHandlers(this IServiceCollection services)
         {
             services.TryAddSingleton<IHandlerActionCache>(s => HandlerCacheFactory());
             services.TryAddSingleton<HandlerActionInvokerCache>();
-            services.TryAddSingleton<IHandlerInvoker, Services.HandlerInvoker>();
+            services.TryAddSingleton<IHandlerInvoker, HandlerActionInvoker>();
             services.TryAddSingleton<IHandlerFactory, HandlerFactory>();
 
             services.TryAddSingleton<ITypeActivatorCache, TypeActivatorCache>();
         }
 
+        /// <summary>
+        /// Loads handlers and handler actions and store them into a cache.
+        /// </summary>
+        /// <returns><see cref="HandlerActionCache"/> containing the handler actions.</returns>
         private static HandlerActionCache HandlerCacheFactory()
         {
             var handlerCacheEntries = new Dictionary<object, HandlerActionModel>();

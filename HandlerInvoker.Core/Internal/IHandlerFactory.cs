@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace HandlerInvoker.Core.Handlers
+namespace HandlerInvoker.Core.Internal
 {
     /// <summary>
     /// Provides methods to create and release handlers.
     /// </summary>
-    public interface IHandlerFactory
+    internal interface IHandlerFactory
     {
         /// <summary>
         /// Creates a new handler instance.

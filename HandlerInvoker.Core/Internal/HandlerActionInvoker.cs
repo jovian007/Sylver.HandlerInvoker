@@ -1,25 +1,22 @@
-﻿using HandlerInvoker.Core.Handlers;
-using HandlerInvoker.Core.Internal;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace HandlerInvoker.Core.Services
+namespace HandlerInvoker.Core.Internal
 {
     /// <summary>
     /// Provides methods to invoke a handler action.
     /// </summary>
-    internal sealed class HandlerInvoker : IHandlerInvoker
+    internal sealed class HandlerActionInvoker : IHandlerInvoker
     {
         private readonly HandlerActionInvokerCache _invokerCache;
 
         /// <summary>
-        /// Creates a new <see cref="HandlerInvoker"/> instance.
+        /// Creates a new <see cref="HandlerActionInvoker"/> instance.
         /// </summary>
         /// <param name="invokerCache">Handler action invoker cache.</param>
-        public HandlerInvoker(HandlerActionInvokerCache invokerCache)
+        public HandlerActionInvoker(HandlerActionInvokerCache invokerCache)
         {
             this._invokerCache = invokerCache;
         }
@@ -67,37 +64,43 @@ namespace HandlerInvoker.Core.Services
             throw new NotImplementedException();
         }
 
-        private object[] PrepareParameters(object[] parameters, HandlerExecutor executor)
+        /// <summary>
+        /// Prepare the invoke parameters. Adds default values if a parameter is missing.
+        /// </summary>
+        /// <param name="originalParameters">Original parameters.</param>
+        /// <param name="executor">Handler executor.</param>
+        /// <returns>Handler parameters.</returns>
+        private object[] PrepareParameters(object[] originalParameters, HandlerExecutor executor)
         {
             if (!executor.MethodParameters.Any())
             {
                 return null;
             }
 
-            var arguments = new object[executor.MethodParameters.Count()];
+            var parameters = new object[executor.MethodParameters.Count()];
 
-            for (int i = 0; i < arguments.Length; i++)
+            for (int i = 0; i < parameters.Length; i++)
             {
                 ParameterInfo methodParameterInfo = executor.MethodParameters.ElementAt(i);
 
-                if (i < parameters.Length)
+                if (i < originalParameters.Length)
                 {
-                    if (parameters[i].GetType() != methodParameterInfo.ParameterType)
+                    if (originalParameters[i] != null && originalParameters[i].GetType() != methodParameterInfo.ParameterType)
                     {
-                        arguments[i] = executor.GetDefaultValueForParameter(i);
+                        parameters[i] = executor.GetDefaultValueForParameter(i);
                     }
                     else
                     {
-                        arguments[i] = parameters[i];
+                        parameters[i] = originalParameters[i];
                     }
                 }
                 else
                 {
-                    arguments[i] = executor.GetDefaultValueForParameter(i);
+                    parameters[i] = executor.GetDefaultValueForParameter(i);
                 }
             }
 
-            return arguments;
+            return parameters;
         }
     }
 }

@@ -1,9 +1,7 @@
-﻿using HandlerInvoker.Core.Internal;
-using System;
+﻿using System;
 
-namespace HandlerInvoker.Core.Handlers.Internal
+namespace HandlerInvoker.Core.Internal
 {
-
     /// <summary>
     /// Provides methods to create and release handlers.
     /// </summary>
