@@ -1,16 +1,10 @@
-﻿using HandlerInvoker.App.Common;
-using HandlerInvoker.App.Handlers;
-using HandlerInvoker.App.Services;
-using HandlerInvoker.ConsoleHost;
+﻿using HandlerInvoker.App.Services;
 using HandlerInvoker.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
+using NLog.Extensions.Hosting;
+using HandlerInvoker.App.Models;
 
 namespace HandlerInvoker.App
 {
@@ -18,10 +12,6 @@ namespace HandlerInvoker.App
     {
         static async Task Main()
         {
-            //IHost consoleHost = new ConsoleHostBuilder().Build();
-
-            //await consoleHost.RunAsync();
-
             var host = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -29,42 +19,18 @@ namespace HandlerInvoker.App
                     services.AddTransient<IDefaultService, DefaultService>();
                     services.AddSingleton<IHostedService, ConsoleHostedService>();
                 })
+                .UseNLog()
                 .UseConsoleLifetime()
                 .Build();
 
-            await host.RunAsync();
+            await host
+                .AddHandlerParameterTransformer<int, ICustomInterface>((originalParam, newParam) =>
+                {
+                    newParam.DoSomething(originalParam * 2);
 
-        }
-    }
-
-    public class ConsoleHostedService : IHostedService, IDisposable
-    {
-        private readonly IHandlerInvoker _handlerInvoker;
-
-        public ConsoleHostedService(IHandlerInvoker handlerInvoker)
-        {
-            this._handlerInvoker = handlerInvoker;
-        }
-
-        public void Dispose()
-        {
-            Console.WriteLine("Dispose()");
-        }
-
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            Console.WriteLine("StartAsync()");
-
-            this._handlerInvoker.Invoke(HandlerActionType.CreateUser, 10, null); // Invokes CustomHander.MyFirstHandlerAction()
-
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            Console.WriteLine("StopAsync()");
-
-            return Task.CompletedTask;
+                    return newParam;
+                })
+                .RunAsync();
         }
     }
 }

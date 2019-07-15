@@ -1,8 +1,10 @@
 ﻿using HandlerInvoker.Core.Attributes;
 using HandlerInvoker.Core.Internal;
+using HandlerInvoker.Core.Internal.Transformers;
 using HandlerInvoker.Core.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +25,20 @@ namespace HandlerInvoker.Core
             services.TryAddSingleton<IHandlerInvoker, HandlerActionInvoker>();
             services.TryAddSingleton<IHandlerFactory, HandlerFactory>();
 
+            services.TryAddSingleton<ParameterTransformerCache>();
+            services.TryAddSingleton<IParameterTransformer, ParameterTransformer>();
+
             services.TryAddSingleton<ITypeActivatorCache, TypeActivatorCache>();
+        }
+
+        public static IHost AddHandlerParameterTransformer<TSource, TDest>(this IHost host, Func<TSource, TDest, TDest> transformer)
+        {
+            var transformerModel = new TransformerModel(typeof(TSource).GetTypeInfo(), typeof(TDest).GetTypeInfo(), (a, b) => transformer((TSource)a, (TDest)b));
+            var transformersCache = host.Services.GetRequiredService<ParameterTransformerCache>();
+
+            transformersCache.AddTransformer(transformerModel);
+
+            return host;
         }
 
         /// <summary>

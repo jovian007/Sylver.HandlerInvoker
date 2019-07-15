@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HandlerInvoker.Core.Internal.Transformers;
+using HandlerInvoker.Core.Models;
+using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,14 +13,17 @@ namespace HandlerInvoker.Core.Internal
     internal sealed class HandlerActionInvoker : IHandlerInvoker
     {
         private readonly HandlerActionInvokerCache _invokerCache;
+        private readonly IParameterTransformer _parameterTransformer;
 
         /// <summary>
         /// Creates a new <see cref="HandlerActionInvoker"/> instance.
         /// </summary>
         /// <param name="invokerCache">Handler action invoker cache.</param>
-        public HandlerActionInvoker(HandlerActionInvokerCache invokerCache)
+        /// <param name="parameterTransformer">Parameter transformer.</param>
+        public HandlerActionInvoker(HandlerActionInvokerCache invokerCache, IParameterTransformer parameterTransformer)
         {
             this._invokerCache = invokerCache;
+            this._parameterTransformer = parameterTransformer;
         }
 
         /// <inheritdoc />
@@ -42,7 +47,7 @@ namespace HandlerInvoker.Core.Internal
 
             try
             {
-                object[] handlerActionParameters = this.PrepareParameters(args, handlerActionInvoker.HandlerExecutor);
+                var handlerActionParameters = this.PrepareParameters(args, handlerActionInvoker.HandlerExecutor);
 
                 handlerResult = handlerActionInvoker.HandlerExecutor.Execute(targetHandler, handlerActionParameters);
             }
@@ -73,21 +78,23 @@ namespace HandlerInvoker.Core.Internal
         private object[] PrepareParameters(object[] originalParameters, HandlerExecutor executor)
         {
             if (!executor.MethodParameters.Any())
-            {
                 return null;
-            }
 
             var parameters = new object[executor.MethodParameters.Count()];
 
-            for (int i = 0; i < parameters.Length; i++)
+            for (var i = 0; i < parameters.Length; i++)
             {
                 ParameterInfo methodParameterInfo = executor.MethodParameters.ElementAt(i);
 
                 if (i < originalParameters.Length)
                 {
-                    if (originalParameters[i] != null && originalParameters[i].GetType() != methodParameterInfo.ParameterType)
+                    Type originalObjectType = originalParameters[i]?.GetType();
+
+                    if (!methodParameterInfo.ParameterType.IsAssignableFrom(originalObjectType))
                     {
-                        parameters[i] = executor.GetDefaultValueForParameter(i);
+                        object transformedParameter = this._parameterTransformer.Transform(originalParameters[i], methodParameterInfo.ParameterType.GetTypeInfo());
+                        
+                        parameters[i] = transformedParameter ?? executor.GetDefaultValueForParameter(i);
                     }
                     else
                     {

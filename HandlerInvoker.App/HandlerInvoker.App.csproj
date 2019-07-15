@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,7 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HandlerInvoker.ConsoleHost\HandlerInvoker.ConsoleHost.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
+    <PackageReference Include="NLog" Version="4.6.5" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.5.1" />
+    <PackageReference Include="NLog.Extensions.Hosting" Version="1.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HandlerInvoker.Core\HandlerInvoker.Core.csproj" />
   </ItemGroup>
 

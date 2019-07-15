@@ -1,63 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace HandlerInvoker.ConsoleHost
 {
     public class ConsoleHostBuilder : IConsoleHostBuilder
     {
-        public IDictionary<object, object> Properties { get; }
+        private readonly HostBuilder _hostBuilder;
+
+        private Action<IHostBuilder> _hostBuilderConfigurationActions;
 
         /// <summary>
         /// Creates a new <see cref="ConsoleHostBuilder"/> instance.
         /// </summary>
         public ConsoleHostBuilder()
         {
+            this._hostBuilder = new HostBuilder();
+            
         }
 
         /// <inheritdoc />
         public IConsoleHostBuilder AddStartupService<TStartup>()
             where TStartup : class, IConsoleStartup
         {
-            // TODO: add the 
+            this._hostBuilder.ConfigureServices(services =>
+            {
+                services.AddSingleton<IHostedService, TStartup>();
+            });
+
             return this;
         }
 
-        public IHostBuilder ConfigureHostConfiguration(Action<IConfigurationBuilder> configureDelegate)
+        /// <inheritdoc />
+        public IConsoleHostBuilder ConfigureHost(Action<IHostBuilder> hostBuilderConfigurator)
         {
-            // TODO
+            this._hostBuilderConfigurationActions += hostBuilderConfigurator;
+
             return this;
         }
 
-        public IHostBuilder ConfigureAppConfiguration(Action<HostBuilderContext, IConfigurationBuilder> configureDelegate)
+        /// <inheritdoc />
+        public IConsoleHostBuilder ConfigureServices(Action<IServiceCollection> services)
         {
-            // TODO
+            this._hostBuilder.ConfigureServices(services);
+
             return this;
         }
 
-        public IHostBuilder ConfigureServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
-        {
-            // TODO
-            return this;
-        }
-
-        public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory)
-        {
-            // TODO
-            return this;
-        }
-
-        public IHostBuilder ConfigureContainer<TContainerBuilder>(Action<HostBuilderContext, TContainerBuilder> configureDelegate)
-        {
-            // TODO
-            return this;
-        }
-
+        /// <inheritdoc />
         public IHost Build()
         {
-            throw new NotImplementedException();
+            this._hostBuilder.UseConsoleLifetime();
+
+            this._hostBuilderConfigurationActions?.Invoke(this._hostBuilder);
+
+            return this._hostBuilder.Build();
         }
     }
 }

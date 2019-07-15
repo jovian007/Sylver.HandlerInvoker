@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandlerInvoker.App", "Handl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandlerInvoker.Core", "HandlerInvoker.Core\HandlerInvoker.Core.csproj", "{AB6AD5A1-55BF-4E38-B9CA-B9F65769F967}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandlerInvoker.ConsoleHost", "HandlerInvoker.ConsoleHost\HandlerInvoker.ConsoleHost.csproj", "{05B98DCB-4E75-4EAA-A8CD-A49F9BB9453E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{AB6AD5A1-55BF-4E38-B9CA-B9F65769F967}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB6AD5A1-55BF-4E38-B9CA-B9F65769F967}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB6AD5A1-55BF-4E38-B9CA-B9F65769F967}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05B98DCB-4E75-4EAA-A8CD-A49F9BB9453E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05B98DCB-4E75-4EAA-A8CD-A49F9BB9453E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05B98DCB-4E75-4EAA-A8CD-A49F9BB9453E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05B98DCB-4E75-4EAA-A8CD-A49F9BB9453E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
