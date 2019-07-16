@@ -10,38 +10,65 @@ namespace HandlerInvoker.Core.Internal.Transformers
     {
         private readonly IDictionary<TypeInfo, ParameterTransformerCacheEntry> _cache;
         private readonly IDictionary<TypeInfo, TransformerModel> _transformers;
+        private readonly IParameterFactory _parameterFactory;
 
-        public ParameterTransformerCache()
+        /// <summary>
+        /// Creates a new <see cref="ParameterTransformerCache"/> instance.
+        /// </summary>
+        /// <param name="parameterFactory">Parameter factory.</param>
+        public ParameterTransformerCache(IParameterFactory parameterFactory)
         {
             this._cache = new ConcurrentDictionary<TypeInfo, ParameterTransformerCacheEntry>();
             this._transformers = new ConcurrentDictionary<TypeInfo, TransformerModel>();
+            this._parameterFactory = parameterFactory;
         }
 
+        /// <summary>
+        /// Adds a new <see cref="TransformerModel"/> to the inner cache.
+        /// </summary>
+        /// <param name="transformerModel"></param>
         public void AddTransformer(TransformerModel transformerModel)
         {
             this._transformers.Add(transformerModel.Destination, transformerModel);
         }
 
+        /// <summary>
+        /// Gets a transformer by its type info key.
+        /// </summary>
+        /// <param name="type">TypeInfo key.</param>
+        /// <returns>
+        /// Existing <see cref="ParameterTransformerCacheEntry"/>; otherwise the system creates it and caches it.
+        /// </returns>
         public ParameterTransformerCacheEntry GetTransformer(TypeInfo type)
         {
             if (!this._cache.TryGetValue(type, out ParameterTransformerCacheEntry transformer))
             {
                 TransformerModel transformerModel = this.GetTransformerModel(type);
 
-                if (transformer == null)
+                if (transformerModel == null)
                     return null;
 
-                // TODO: create transformer and cache it.
+                transformer = new ParameterTransformerCacheEntry(
+                    transformerModel.Source, 
+                    transformerModel.Destination, 
+                    type,
+                    this._parameterFactory.Create,
+                    transformerModel.Transformer);
+
+                this._cache.Add(type, transformer);
             }
 
             return transformer;
         }
 
+        /// <summary>
+        /// Gets the best transformer model matching the type info.
+        /// </summary>
+        /// <param name="type">Type Informations.</param>
+        /// <returns>Best transformer model.</returns>
         private TransformerModel GetTransformerModel(TypeInfo type)
         {
-            TransformerModel transformer = null;
-
-            if (!this._transformers.TryGetValue(type, out transformer))
+            if (!this._transformers.TryGetValue(type, out TransformerModel transformer))
             {
                 TypeInfo[] interfaces = type.GetInterfaces().Select(x => x.GetTypeInfo()).ToArray();
 
@@ -56,9 +83,5 @@ namespace HandlerInvoker.Core.Internal.Transformers
 
             return transformer;
         }
-    }
-
-    internal class ParameterTransformerCacheEntry
-    {
     }
 }

@@ -18,7 +18,7 @@ namespace HandlerInvoker.App.Handlers
         [HandlerAction(HandlerActionType.CreateUser)]
         public void MyFirstHandlerAction(int index, CustomObject test)
         {
-            var isObjectNull = test == null ? "null" : "CustomObject()";
+            var isObjectNull = test == null ? "null" : $"CustomObject({test.IntegerValue})";
 
             this._defaultService.Print($"MyFirstHandlerAction({index}, {isObjectNull})");
         }

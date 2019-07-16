@@ -22,18 +22,30 @@ namespace HandlerInvoker.Core
         {
             services.TryAddSingleton<IHandlerActionCache>(s => HandlerCacheFactory());
             services.TryAddSingleton<HandlerActionInvokerCache>();
-            services.TryAddSingleton<IHandlerInvoker, HandlerActionInvoker>();
             services.TryAddSingleton<IHandlerFactory, HandlerFactory>();
+            services.TryAddSingleton<IHandlerInvoker, HandlerActionInvoker>();
 
             services.TryAddSingleton<ParameterTransformerCache>();
+            services.TryAddSingleton<IParameterFactory, ParameterFactory>();
             services.TryAddSingleton<IParameterTransformer, ParameterTransformer>();
 
             services.TryAddSingleton<ITypeActivatorCache, TypeActivatorCache>();
         }
 
+        /// <summary>
+        /// Adds a new handler parameter transformer.
+        /// </summary>
+        /// <typeparam name="TSource">Source type.</typeparam>
+        /// <typeparam name="TDest">Destination type.</typeparam>
+        /// <param name="host">Current program host.</param>
+        /// <param name="transformer">Transformer method.</param>
+        /// <returns>Current host.</returns>
         public static IHost AddHandlerParameterTransformer<TSource, TDest>(this IHost host, Func<TSource, TDest, TDest> transformer)
         {
-            var transformerModel = new TransformerModel(typeof(TSource).GetTypeInfo(), typeof(TDest).GetTypeInfo(), (a, b) => transformer((TSource)a, (TDest)b));
+            var transformerModel = new TransformerModel(
+                typeof(TSource).GetTypeInfo(), 
+                typeof(TDest).GetTypeInfo(), 
+                (source, dest) => transformer((TSource)source, (TDest)dest));
             var transformersCache = host.Services.GetRequiredService<ParameterTransformerCache>();
 
             transformersCache.AddTransformer(transformerModel);

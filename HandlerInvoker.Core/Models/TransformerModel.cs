@@ -1,4 +1,4 @@
-﻿using System;
+﻿using HandlerInvoker.Core.Internal.Transformers;
 using System.Reflection;
 
 namespace HandlerInvoker.Core.Models
@@ -9,13 +9,13 @@ namespace HandlerInvoker.Core.Models
 
         public TypeInfo Destination { get; }
 
-        public Func<object, object, object> Trasnformer { get; }
+        public TransformerMethod Transformer { get; }
 
-        public TransformerModel(TypeInfo source, TypeInfo destination, Func<object, object, object> transformer)
+        public TransformerModel(TypeInfo source, TypeInfo destination, TransformerMethod transformer)
         {
             this.Source = source;
             this.Destination = destination;
-            this.Trasnformer = transformer;
+            this.Transformer = transformer;
         }
     }
 }
