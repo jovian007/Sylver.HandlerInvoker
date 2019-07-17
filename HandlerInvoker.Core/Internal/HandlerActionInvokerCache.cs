@@ -1,4 +1,4 @@
-﻿using HandlerInvoker.Core.Helpers;
+﻿using HandlerInvoker.Core.Extensions;
 using HandlerInvoker.Core.Models;
 using System;
 using System.Collections.Concurrent;

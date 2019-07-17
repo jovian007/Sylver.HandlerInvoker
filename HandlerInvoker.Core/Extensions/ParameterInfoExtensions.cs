@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace HandlerInvoker.Core.Helpers
+namespace HandlerInvoker.Core.Extensions
 {
     /// <summary>
     /// Provides extensions to the <see cref="ParameterInfo"/> class.
