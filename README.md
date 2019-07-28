@@ -1,5 +1,9 @@
 # Sylver.HandlerInvoker
 
+[![Build Status](https://travis-ci.org/Eastrall/Sylver.HandlerInvoker.svg?branch=master)](https://travis-ci.org/Eastrall/Sylver.HandlerInvoker)
+[![codecov](https://codecov.io/gh/Eastrall/Sylver.HandlerInvoker/branch/master/graph/badge.svg)](https://codecov.io/gh/Eastrall/Sylver.HandlerInvoker)
+
+
 `Sylver.HandlerInvoker` is a .NET Core library that provides a mechanism to invoke actions just like [ASP.NET Core][aspnet-core-github] controllers.
 
 > The implementation has been highly inspired by the [ASP.NET Core][aspnet-core-github] MVC source code. Thank you Microsoft and all developers of ASP.NET Core :-)
