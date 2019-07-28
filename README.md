@@ -1,12 +1,12 @@
-# HandlerInvoker
+# Sylver.HandlerInvoker
 
-HandlerInvoker is an experimental project aiming to implement an invoker like [ASP.NET Core][aspnet-core-github] to invoke actions from handler (equivalent of `Controllers` in [ASP.NET Core][aspnet-core-github]).
+`Sylver.HandlerInvoker` is a .NET Core library that provides a mechanism to invoke actions just like [ASP.NET Core][aspnet-core-github] controllers.
 
 > The implementation has been highly inspired by the [ASP.NET Core][aspnet-core-github] MVC source code. Thank you Microsoft and all developers of ASP.NET Core :-)
 
 ## How it works
 
-`HandlerInvoker` has been designed to be integrated with the .NET Core generic `HostBuilder`, so it can benefit from the built-in dependency injection pattern, configuration and logging.
+`Sylver.HandlerInvoker` has been designed to be integrated with the .NET Core generic `HostBuilder`, so it can benefit from the built-in dependency injection pattern, configuration and logging.
 
 ### Create handlers
 
