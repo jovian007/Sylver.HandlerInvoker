@@ -1,6 +1,7 @@
 # Sylver.HandlerInvoker
 
 [![Build Status](https://travis-ci.org/Eastrall/Sylver.HandlerInvoker.svg?branch=master)](https://travis-ci.org/Eastrall/Sylver.HandlerInvoker)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/21222a65218c402c839a4ff29cf97aff)](https://www.codacy.com/app/Eastrall/Sylver.HandlerInvoker?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Eastrall/Sylver.HandlerInvoker&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/Eastrall/Sylver.HandlerInvoker/branch/master/graph/badge.svg)](https://codecov.io/gh/Eastrall/Sylver.HandlerInvoker)
 
 
