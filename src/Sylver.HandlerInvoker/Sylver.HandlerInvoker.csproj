@@ -10,7 +10,7 @@
     <RepositoryUrl>https://github.com/Eastrall/Sylver.HandlerInvoker</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <NeutralLanguage />
-    <PackageIconUrl>https://github.com/Eastrall/Sylver.HandlerInvoker/src/Sylver.HandlerInvoker/Resources/icon.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Eastrall/Sylver.HandlerInvoker/master/src/Sylver.HandlerInvoker/Resources/icon.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
