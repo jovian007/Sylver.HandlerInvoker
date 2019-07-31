@@ -100,6 +100,7 @@ The cached informations are the following:
 
 # Thanks
 
-Thank you to the [ASP.NET Core][aspnet-core-github] developers for the great code and inspiration. I've learned a lot of things by reading the code. :-)
+- Thank you to the [ASP.NET Core][aspnet-core-github] team and contributors for the great code and inspiration. I've learned a lot of things by reading the code. :-)
+- Package icon from [icons8](https://icons8.com/)
 
 [aspnet-core-github]: https://github.com/aspnet/AspNetCore
