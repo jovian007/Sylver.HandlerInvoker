@@ -35,8 +35,8 @@ namespace Sylver.HandlerInvoker.Internal
         /// </summary>
         public TypeActivatorCache()
         {
-            this._createFactory = (type) => ActivatorUtilities.CreateFactory(type, Type.EmptyTypes);
-            this._typeActivatorCache = new ConcurrentDictionary<Type, ObjectFactory>();
+            _createFactory = (type) => ActivatorUtilities.CreateFactory(type, Type.EmptyTypes);
+            _typeActivatorCache = new ConcurrentDictionary<Type, ObjectFactory>();
         }
 
         /// <inheritdoc />
@@ -52,7 +52,7 @@ namespace Sylver.HandlerInvoker.Internal
                 throw new ArgumentNullException(nameof(implementationType));
             }
 
-            ObjectFactory factory = this._typeActivatorCache.GetOrAdd(implementationType, this._createFactory);
+            ObjectFactory factory = _typeActivatorCache.GetOrAdd(implementationType, _createFactory);
 
             return (TInstance)factory(serviceProvider, null);
         }

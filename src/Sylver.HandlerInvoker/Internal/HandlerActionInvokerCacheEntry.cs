@@ -33,10 +33,10 @@ namespace Sylver.HandlerInvoker.Internal
         /// <param name="handlerExecutor">Handler action executor.</param>
         internal HandlerActionInvokerCacheEntry(Type handlerType, Func<Type, object> handlerFactory, Action<object> handlerReleaser, HandlerExecutor handlerExecutor)
         {
-            this.HandlerType = handlerType;
-            this.HandlerFactory = handlerFactory;
-            this.HandlerReleaser = handlerReleaser;
-            this.HandlerExecutor = handlerExecutor;
+            HandlerType = handlerType;
+            HandlerFactory = handlerFactory;
+            HandlerReleaser = handlerReleaser;
+            HandlerExecutor = handlerExecutor;
         }
     }
 }

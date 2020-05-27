@@ -18,9 +18,9 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <param name="parameterFactory">Parameter factory.</param>
         public ParameterTransformerCache(IParameterFactory parameterFactory)
         {
-            this._cache = new ConcurrentDictionary<TypeInfo, ParameterTransformerCacheEntry>();
-            this._transformers = new ConcurrentDictionary<TypeInfo, TransformerModel>();
-            this._parameterFactory = parameterFactory;
+            _cache = new ConcurrentDictionary<TypeInfo, ParameterTransformerCacheEntry>();
+            _transformers = new ConcurrentDictionary<TypeInfo, TransformerModel>();
+            _parameterFactory = parameterFactory;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <param name="transformerModel"></param>
         public void AddTransformer(TransformerModel transformerModel)
         {
-            this._transformers.Add(transformerModel.Destination, transformerModel);
+            _transformers.Add(transformerModel.Destination, transformerModel);
         }
 
         /// <summary>
@@ -41,21 +41,23 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// </returns>
         public ParameterTransformerCacheEntry GetTransformer(TypeInfo type)
         {
-            if (!this._cache.TryGetValue(type, out ParameterTransformerCacheEntry transformer))
+            if (!_cache.TryGetValue(type, out ParameterTransformerCacheEntry transformer))
             {
-                TransformerModel transformerModel = this.GetTransformerModel(type);
+                TransformerModel transformerModel = GetTransformerModel(type);
 
                 if (transformerModel == null)
+                {
                     return null;
+                }
 
                 transformer = new ParameterTransformerCacheEntry(
                     transformerModel.Source, 
                     transformerModel.Destination, 
                     type,
-                    this._parameterFactory.Create,
+                    _parameterFactory.Create,
                     transformerModel.Transformer);
 
-                this._cache.Add(type, transformer);
+                _cache.Add(type, transformer);
             }
 
             return transformer;
@@ -68,13 +70,13 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <returns>Best transformer model.</returns>
         private TransformerModel GetTransformerModel(TypeInfo type)
         {
-            if (!this._transformers.TryGetValue(type, out TransformerModel transformer))
+            if (!_transformers.TryGetValue(type, out TransformerModel transformer))
             {
                 TypeInfo[] interfaces = type.GetInterfaces().Select(x => x.GetTypeInfo()).ToArray();
 
                 for (int i = 0; i < interfaces.Length; i++)
                 {
-                    if (this._transformers.TryGetValue(interfaces[i], out transformer))
+                    if (_transformers.TryGetValue(interfaces[i], out transformer))
                     {
                         break;
                     }

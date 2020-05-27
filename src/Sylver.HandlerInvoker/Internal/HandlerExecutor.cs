@@ -19,15 +19,15 @@ namespace Sylver.HandlerInvoker.Internal
 
         public HandlerExecutor(TypeInfo targetHandlerTypeInfo, MethodInfo handlerActionMethodInfo, object[] defaultParameters)
         {
-            this._targetHandlerTypeInfo = targetHandlerTypeInfo;
-            this._handlerActionMethodInfo = handlerActionMethodInfo;
-            this._handlerActionDefaultParameters = defaultParameters;
-            this._executor = this.BuildExecutor();
+            _targetHandlerTypeInfo = targetHandlerTypeInfo;
+            _handlerActionMethodInfo = handlerActionMethodInfo;
+            _handlerActionDefaultParameters = defaultParameters;
+            _executor = BuildExecutor();
 
-            this.MethodParameters = handlerActionMethodInfo.GetParameters();
+            MethodParameters = handlerActionMethodInfo.GetParameters();
         }
 
-        public object Execute(object target, params object[] parameters) => this._executor(target, parameters);
+        public object Execute(object target, params object[] parameters) => _executor(target, parameters);
 
         private HandlerMethodExecutor BuildExecutor()
         {
@@ -35,7 +35,7 @@ namespace Sylver.HandlerInvoker.Internal
             ParameterExpression parametersParameter = Expression.Parameter(typeof(object[]), "parameters");
 
             var parameters = new List<Expression>();
-            ParameterInfo[] parameterInfos = this._handlerActionMethodInfo.GetParameters();
+            ParameterInfo[] parameterInfos = _handlerActionMethodInfo.GetParameters();
 
             for (var i = 0; i < parameterInfos.Length; i++)
             {
@@ -46,8 +46,8 @@ namespace Sylver.HandlerInvoker.Internal
                 parameters.Add(valueCast);
             }
 
-            UnaryExpression instanceCast = Expression.Convert(targetParameter, this._targetHandlerTypeInfo.AsType());
-            MethodCallExpression methodCall = Expression.Call(instanceCast, this._handlerActionMethodInfo, parameters);
+            UnaryExpression instanceCast = Expression.Convert(targetParameter, _targetHandlerTypeInfo.AsType());
+            MethodCallExpression methodCall = Expression.Call(instanceCast, _handlerActionMethodInfo, parameters);
 
             if (methodCall.Type == typeof(void))
             {
@@ -69,10 +69,10 @@ namespace Sylver.HandlerInvoker.Internal
 
         public object GetDefaultValueForParameter(int index)
         {
-            if (index < 0 || index > this.MethodParameters.Length - 1)
+            if (index < 0 || index > MethodParameters.Length - 1)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            return this._handlerActionDefaultParameters[index];
+            return _handlerActionDefaultParameters[index];
         }
     }
 }

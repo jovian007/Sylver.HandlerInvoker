@@ -20,7 +20,9 @@ namespace Sylver.HandlerInvoker
         /// <param name="services">Service collection container.</param>
         public static void AddHandlers(this IServiceCollection services)
         {
-            services.TryAddSingleton<IHandlerActionCache>(s => HandlerCacheFactory());
+            HandlerActionCache actionsCache = HandlerCacheFactory();
+
+            services.TryAddSingleton<IHandlerActionCache>(actionsCache);
             services.TryAddSingleton<HandlerActionInvokerCache>();
             services.TryAddSingleton<IHandlerFactory, HandlerFactory>();
             services.TryAddSingleton<IHandlerInvoker, HandlerActionInvoker>();

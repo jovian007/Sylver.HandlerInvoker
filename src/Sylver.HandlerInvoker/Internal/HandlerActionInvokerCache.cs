@@ -19,9 +19,9 @@ namespace Sylver.HandlerInvoker.Internal
         /// <param name="handlerFactory">Handler factory.</param>
         public HandlerActionInvokerCache(IHandlerActionCache handlerCache, IHandlerFactory handlerFactory)
         {
-            this._cache = new ConcurrentDictionary<object, HandlerActionInvokerCacheEntry>();
-            this._handlerCache = handlerCache;
-            this._handlerFactory = handlerFactory;
+            _cache = new ConcurrentDictionary<object, HandlerActionInvokerCacheEntry>();
+            _handlerCache = handlerCache;
+            _handlerFactory = handlerFactory;
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace Sylver.HandlerInvoker.Internal
         /// </returns>
         public HandlerActionInvokerCacheEntry GetCachedHandlerAction(object handlerAction)
         {
-            if (!this._cache.TryGetValue(handlerAction, out HandlerActionInvokerCacheEntry cacheEntry))
+            if (!_cache.TryGetValue(handlerAction, out HandlerActionInvokerCacheEntry cacheEntry))
             {
-                HandlerActionModel handlerActionModel = this._handlerCache.GetHandlerAction(handlerAction);
+                HandlerActionModel handlerActionModel = _handlerCache.GetHandlerAction(handlerAction);
 
                 if (handlerActionModel == null)
                 {
@@ -52,11 +52,11 @@ namespace Sylver.HandlerInvoker.Internal
 
                 cacheEntry = new HandlerActionInvokerCacheEntry(
                     handlerActionModel.HandlerTypeInfo.AsType(),
-                    this._handlerFactory.CreateHandler,
-                    this._handlerFactory.ReleaseHandler,
+                    _handlerFactory.CreateHandler,
+                    _handlerFactory.ReleaseHandler,
                     new HandlerExecutor(handlerActionModel.HandlerTypeInfo, handlerActionModel.Method, defaultHandlerActionParameters));
 
-                this._cache.Add(handlerAction, cacheEntry);
+                _cache.Add(handlerAction, cacheEntry);
             }
 
             return cacheEntry;
@@ -67,7 +67,7 @@ namespace Sylver.HandlerInvoker.Internal
         /// </summary>
         public void Dispose()
         {
-            this._cache.Clear();
+            _cache.Clear();
         }
     }
 }

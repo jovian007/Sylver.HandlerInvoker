@@ -1,5 +1,5 @@
-﻿using Sylver.HandlerInvoker.Internal.Transformers;
-using Sylver.HandlerInvoker.Models;
+﻿using Sylver.HandlerInvoker.Exceptions;
+using Sylver.HandlerInvoker.Internal.Transformers;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -22,32 +22,32 @@ namespace Sylver.HandlerInvoker.Internal
         /// <param name="parameterTransformer">Parameter transformer.</param>
         public HandlerActionInvoker(HandlerActionInvokerCache invokerCache, IParameterTransformer parameterTransformer)
         {
-            this._invokerCache = invokerCache;
-            this._parameterTransformer = parameterTransformer;
+            _invokerCache = invokerCache;
+            _parameterTransformer = parameterTransformer;
         }
 
         /// <inheritdoc />
         public object Invoke(object handlerAction, params object[] args)
         {
-            HandlerActionInvokerCacheEntry handlerActionInvoker = this._invokerCache.GetCachedHandlerAction(handlerAction);
+            HandlerActionInvokerCacheEntry handlerActionInvoker = _invokerCache.GetCachedHandlerAction(handlerAction);
 
             if (handlerActionInvoker == null)
             {
-                throw new ArgumentNullException(nameof(handlerActionInvoker));
+                throw new HandlerActionNotFoundException(handlerAction);
             }
 
             var targetHandler = handlerActionInvoker.HandlerFactory(handlerActionInvoker.HandlerType);
 
             if (targetHandler == null)
             {
-                throw new ArgumentNullException(nameof(targetHandler));
+                throw new HandlerTargetCreationFailedException(handlerActionInvoker.HandlerType);
             }
 
             object handlerResult = null;
 
             try
             {
-                var handlerActionParameters = this.PrepareParameters(args, handlerActionInvoker.HandlerExecutor);
+                object[] handlerActionParameters = PrepareParameters(args, handlerActionInvoker.HandlerExecutor);
 
                 handlerResult = handlerActionInvoker.HandlerExecutor.Execute(targetHandler, handlerActionParameters);
             }
@@ -78,7 +78,9 @@ namespace Sylver.HandlerInvoker.Internal
         private object[] PrepareParameters(object[] originalParameters, HandlerExecutor executor)
         {
             if (!executor.MethodParameters.Any())
+            {
                 return null;
+            }
 
             var parameters = new object[executor.MethodParameters.Count()];
 
@@ -92,7 +94,7 @@ namespace Sylver.HandlerInvoker.Internal
 
                     if (!methodParameterInfo.ParameterType.IsAssignableFrom(originalObjectType))
                     {
-                        object transformedParameter = this._parameterTransformer.Transform(originalParameters[i], methodParameterInfo.ParameterType.GetTypeInfo());
+                        object transformedParameter = _parameterTransformer.Transform(originalParameters[i], methodParameterInfo.ParameterType.GetTypeInfo());
                         
                         parameters[i] = transformedParameter ?? executor.GetDefaultValueForParameter(i);
                     }

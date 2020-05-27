@@ -28,9 +28,9 @@ namespace Sylver.HandlerInvoker.Models
         /// <param name="transformer">Transformer function.</param>
         public TransformerModel(TypeInfo source, TypeInfo destination, TransformerFuntion transformer)
         {
-            this.Source = source;
-            this.Destination = destination;
-            this.Transformer = transformer;
+            Source = source;
+            Destination = destination;
+            Transformer = transformer;
         }
     }
 }

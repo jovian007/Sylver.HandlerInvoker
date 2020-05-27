@@ -15,8 +15,8 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <param name="typeActivatorCache">Type Activator cache.</param>
         public ParameterFactory(IServiceProvider serviceProvider, ITypeActivatorCache typeActivatorCache)
         {
-            this._serviceProvider = serviceProvider;
-            this._typeActivatorCache = typeActivatorCache;
+            _serviceProvider = serviceProvider;
+            _typeActivatorCache = typeActivatorCache;
         }
 
         /// <inheritdoc />
@@ -27,7 +27,7 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return this._typeActivatorCache.Create<object>(this._serviceProvider, type.AsType());
+            return _typeActivatorCache.Create<object>(_serviceProvider, type.AsType());
         }
     }
 }

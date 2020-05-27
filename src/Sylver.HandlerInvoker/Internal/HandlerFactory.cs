@@ -17,8 +17,8 @@ namespace Sylver.HandlerInvoker.Internal
         /// <param name="typeActivatorCache"></param>
         public HandlerFactory(IServiceProvider serviceProvider, ITypeActivatorCache typeActivatorCache)
         {
-            this._serviceProvider = serviceProvider;
-            this._typeActivatorCache = typeActivatorCache;
+            _serviceProvider = serviceProvider;
+            _typeActivatorCache = typeActivatorCache;
         }
 
         /// <inheritdoc />
@@ -27,7 +27,7 @@ namespace Sylver.HandlerInvoker.Internal
             if (handlerType == null)
                 throw new ArgumentNullException(nameof(handlerType));
 
-            return this._typeActivatorCache.Create<object>(this._serviceProvider, handlerType);
+            return _typeActivatorCache.Create<object>(_serviceProvider, handlerType);
         }
 
         /// <inheritdoc />

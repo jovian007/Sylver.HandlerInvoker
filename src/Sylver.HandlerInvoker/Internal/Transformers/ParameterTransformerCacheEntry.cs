@@ -42,11 +42,11 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <param name="transformer">Parameter tranformer function.</param>
         public ParameterTransformerCacheEntry(TypeInfo source, TypeInfo destination, TypeInfo target, Func<TypeInfo, object> parameterFactory, TransformerFuntion transformer)
         {
-            this.Source = source;
-            this.Destination = destination;
-            this.Target = target;
-            this.ParameterFactory = parameterFactory;
-            this.Transformer = transformer;
+            Source = source;
+            Destination = destination;
+            Target = target;
+            ParameterFactory = parameterFactory;
+            Transformer = transformer;
         }
     }
 }

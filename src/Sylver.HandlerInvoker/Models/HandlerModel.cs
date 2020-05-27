@@ -30,9 +30,9 @@ namespace Sylver.HandlerInvoker.Models
         /// <param name="actions">Handler actions</param>
         public HandlerModel(TypeInfo handlerType, IEnumerable<HandlerActionModel> actions)
         {
-            this.Name = handlerType.Name;
-            this.TypeInfo = handlerType;
-            this.Actions = new List<HandlerActionModel>(actions);
+            Name = handlerType.Name;
+            TypeInfo = handlerType;
+            Actions = new List<HandlerActionModel>(actions);
         }
     }
 }

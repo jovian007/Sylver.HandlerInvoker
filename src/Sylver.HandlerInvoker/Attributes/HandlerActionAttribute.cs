@@ -16,7 +16,7 @@ namespace Sylver.HandlerInvoker.Attributes
         /// <param name="action">Action type.</param>
         public HandlerActionAttribute(object action)
         {
-            this.Action = action;
+            Action = action;
         }
     }
 }

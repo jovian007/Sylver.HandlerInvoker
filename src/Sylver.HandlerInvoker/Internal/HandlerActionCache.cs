@@ -14,13 +14,13 @@ namespace Sylver.HandlerInvoker.Internal
         /// <param name="cacheEntries">Cached entries.</param>
         public HandlerActionCache(IDictionary<object, HandlerActionModel> cacheEntries)
         {
-            this._handlerCache = new ConcurrentDictionary<object, HandlerActionModel>(cacheEntries);
+            _handlerCache = new ConcurrentDictionary<object, HandlerActionModel>(cacheEntries);
         }
 
         /// <inheritdoc />
         public HandlerActionModel GetHandlerAction(object handlerAction)
         {
-            return this._handlerCache.TryGetValue(handlerAction, out HandlerActionModel value) ? value : null;
+            return _handlerCache.TryGetValue(handlerAction, out HandlerActionModel value) ? value : null;
         }
     }
 }

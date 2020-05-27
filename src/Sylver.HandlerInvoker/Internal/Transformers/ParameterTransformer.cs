@@ -12,16 +12,18 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <param name="transformerCache">Parameter transformer cache.</param>
         public ParameterTransformer(ParameterTransformerCache transformerCache)
         {
-            this._transformerCache = transformerCache;
+            _transformerCache = transformerCache;
         }
 
         /// <inheritdoc />
         public object Transform(object originalParameter, TypeInfo destinationParameterType)
         {
-            ParameterTransformerCacheEntry transformer = this._transformerCache.GetTransformer(destinationParameterType);
+            ParameterTransformerCacheEntry transformer = _transformerCache.GetTransformer(destinationParameterType);
 
             if (transformer == null)
+            {
                 return null;
+            }
 
             object destinationParameter = transformer.ParameterFactory(destinationParameterType);
 
