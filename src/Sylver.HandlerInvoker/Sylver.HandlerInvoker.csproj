@@ -11,7 +11,7 @@
     <RepositoryType>Git</RepositoryType>
     <NeutralLanguage />
     <PackageIconUrl>https://raw.githubusercontent.com/Eastrall/Sylver.HandlerInvoker/master/src/Sylver.HandlerInvoker/Resources/icon.png</PackageIconUrl>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
