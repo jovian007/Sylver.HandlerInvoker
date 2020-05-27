@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/Eastrall/Sylver.HandlerInvoker.svg?branch=master)](https://travis-ci.org/Eastrall/Sylver.HandlerInvoker)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/21222a65218c402c839a4ff29cf97aff)](https://www.codacy.com/app/Eastrall/Sylver.HandlerInvoker?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Eastrall/Sylver.HandlerInvoker&amp;utm_campaign=Badge_Grade)
 [![codecov](https://codecov.io/gh/Eastrall/Sylver.HandlerInvoker/branch/master/graph/badge.svg)](https://codecov.io/gh/Eastrall/Sylver.HandlerInvoker)
+[![Nuget](https://img.shields.io/nuget/v/Sylver.HandlerInvoker.svg)](https://www.nuget.org/packages/Sylver.HandlerInvoker)
 
 
 `Sylver.HandlerInvoker` is a .NET Core library that provides a mechanism to invoke actions just like [ASP.NET Core][aspnet-core-github] controllers.
@@ -99,6 +100,7 @@ The cached informations are the following:
 
 # Thanks
 
-Thank you to the [ASP.NET Core][aspnet-core-github] developers for the great code and inspiration. I've learned a lot of things by reading the code. :-)
+- Thank you to the [ASP.NET Core][aspnet-core-github] team and contributors for the great code and inspiration. I've learned a lot of things by reading the code. :-)
+- Package icon from [icons8](https://icons8.com/)
 
 [aspnet-core-github]: https://github.com/aspnet/AspNetCore
