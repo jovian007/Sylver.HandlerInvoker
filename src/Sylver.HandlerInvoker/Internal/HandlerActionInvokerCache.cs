@@ -45,7 +45,7 @@ namespace Sylver.HandlerInvoker.Internal
 
                 if (handlerActionModel == null)
                 {
-                    throw new ArgumentNullException(nameof(handlerActionModel));
+                    return null;
                 }
 
                 object[] defaultHandlerActionParameters = handlerActionModel.Method.GetMethodParametersDefaultValues();
