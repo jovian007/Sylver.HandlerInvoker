@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace Sylver.HandlerInvoker
 {
@@ -10,17 +11,18 @@ namespace Sylver.HandlerInvoker
         /// <summary>
         /// Invokes a handler action.
         /// </summary>
+        /// <param name="scope">Handler scope.</param>
         /// <param name="handlerAction">Handler action.</param>
         /// <param name="args">Handler action parameters.</param>
         /// <returns>Handler action result.</returns>
-        object Invoke(object handlerAction, params object[] args);
+        object Invoke(IServiceScope scope, object handlerAction, params object[] args);
 
         /// <summary>
-        /// 
+        ///  Invokes a handler action async.
         /// </summary>
-        /// <param name="handlerAction"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        Task InvokeAsync(object handlerAction, params object[] args);
+        /// <param name="scope">Handler scope.</param>
+        /// <param name="handlerAction">Handler action.</param>
+        /// <param name="args">Handler action parameters.</param>
+        Task InvokeAsync(IServiceScope scope, object handlerAction, params object[] args);
     }
 }

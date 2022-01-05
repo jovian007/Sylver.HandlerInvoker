@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Sylver.HandlerInvoker.Internal
 {
@@ -7,7 +8,6 @@ namespace Sylver.HandlerInvoker.Internal
     /// </summary>
     internal sealed class HandlerFactory : IHandlerFactory
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly ITypeActivatorCache _typeActivatorCache;
 
         /// <summary>
@@ -15,19 +15,18 @@ namespace Sylver.HandlerInvoker.Internal
         /// </summary>
         /// <param name="serviceProvider"></param>
         /// <param name="typeActivatorCache"></param>
-        public HandlerFactory(IServiceProvider serviceProvider, ITypeActivatorCache typeActivatorCache)
+        public HandlerFactory(ITypeActivatorCache typeActivatorCache)
         {
-            _serviceProvider = serviceProvider;
             _typeActivatorCache = typeActivatorCache;
         }
 
         /// <inheritdoc />
-        public object CreateHandler(Type handlerType)
+        public object CreateHandler(IServiceScope scope, Type handlerType)
         {
             if (handlerType == null)
                 throw new ArgumentNullException(nameof(handlerType));
 
-            return _typeActivatorCache.Create<object>(_serviceProvider, handlerType);
+            return _typeActivatorCache.Create<object>(scope, handlerType);
         }
 
         /// <inheritdoc />

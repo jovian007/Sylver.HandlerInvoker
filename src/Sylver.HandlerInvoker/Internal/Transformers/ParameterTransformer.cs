@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Sylver.HandlerInvoker.Internal.Transformers
 {
@@ -16,7 +17,7 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         }
 
         /// <inheritdoc />
-        public object Transform(object originalParameter, TypeInfo destinationParameterType)
+        public object Transform(IServiceScope scope, object originalParameter, TypeInfo destinationParameterType)
         {
             ParameterTransformerCacheEntry transformer = _transformerCache.GetTransformer(destinationParameterType);
 
@@ -25,7 +26,7 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
                 return null;
             }
 
-            object destinationParameter = transformer.ParameterFactory(destinationParameterType);
+            object destinationParameter = transformer.ParameterFactory(scope, destinationParameterType);
 
             return transformer.Transformer(originalParameter, destinationParameter);
         }

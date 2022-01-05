@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Sylver.HandlerInvoker.Internal.Transformers
 {
@@ -10,8 +11,9 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <summary>
         /// Creates a new parameter instance based on the given type information.
         /// </summary>
+        /// <param name="scope">calling scope</param>
         /// <param name="type">Type information.</param>
         /// <returns>New instance as <see cref="object"/>.</returns>
-        object Create(TypeInfo type);
+        object Create(IServiceScope scope, TypeInfo type);
     }
 }

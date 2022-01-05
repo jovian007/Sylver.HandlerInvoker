@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Sylver.HandlerInvoker.Internal
 {
@@ -12,7 +13,7 @@ namespace Sylver.HandlerInvoker.Internal
         /// </summary>
         /// <param name="handlerType">Handler type.</param>
         /// <returns>New handler instance.</returns>
-        object CreateHandler(Type handlerType);
+        object CreateHandler(IServiceScope scope, Type handlerType);
 
         /// <summary>
         /// Releases an handler resources if it implements the <see cref="IDisposable"/> interface.

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace Sylver.HandlerInvoker.Internal.Transformers
 {
@@ -10,9 +11,10 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <summary>
         /// Transforms a source parameter into a destination parameter using a cached transformer.
         /// </summary>
+        /// <param name="scope">calling scope</param>
         /// <param name="originalParameter">Original parameter.</param>
         /// <param name="destinationParameterType">Destination parameter type information.</param>
         /// <returns>Transformed parameter.</returns>
-        object Transform(object originalParameter, TypeInfo destinationParameterType);
+        object Transform(IServiceScope scope, object originalParameter, TypeInfo destinationParameterType);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Reflection;
 
 namespace Sylver.HandlerInvoker.Internal.Transformers
@@ -25,7 +26,7 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <summary>
         /// Gets the parameter factory to create new instances of the parameter based on his type information.
         /// </summary>
-        public Func<TypeInfo, object> ParameterFactory { get; }
+        public Func<IServiceScope, TypeInfo, object> ParameterFactory { get; }
 
         /// <summary>
         /// Gets the parameter transformer function.
@@ -40,7 +41,7 @@ namespace Sylver.HandlerInvoker.Internal.Transformers
         /// <param name="target">Method target parameter type information.</param>
         /// <param name="parameterFactory">Parameter factory creator.</param>
         /// <param name="transformer">Parameter tranformer function.</param>
-        public ParameterTransformerCacheEntry(TypeInfo source, TypeInfo destination, TypeInfo target, Func<TypeInfo, object> parameterFactory, TransformerFuntion transformer)
+        public ParameterTransformerCacheEntry(TypeInfo source, TypeInfo destination, TypeInfo target, Func<IServiceScope, TypeInfo, object> parameterFactory, TransformerFuntion transformer)
         {
             Source = source;
             Destination = destination;

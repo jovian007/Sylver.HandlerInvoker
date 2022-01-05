@@ -1,4 +1,5 @@
-﻿using Sylver.HandlerInvoker.Exceptions;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Sylver.HandlerInvoker.Exceptions;
 using Sylver.HandlerInvoker.Internal.Transformers;
 using System;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Sylver.HandlerInvoker.Internal
         }
 
         /// <inheritdoc />
-        public object Invoke(object handlerAction, params object[] args)
+        public object Invoke(IServiceScope scope, object handlerAction, params object[] args)
         {
             HandlerActionInvokerCacheEntry handlerActionInvoker = _invokerCache.GetCachedHandlerAction(handlerAction);
 
@@ -36,7 +37,7 @@ namespace Sylver.HandlerInvoker.Internal
                 throw new HandlerActionNotFoundException(handlerAction);
             }
 
-            var targetHandler = handlerActionInvoker.HandlerFactory(handlerActionInvoker.HandlerType);
+            var targetHandler = handlerActionInvoker.HandlerFactory(scope, handlerActionInvoker.HandlerType);
 
             if (targetHandler == null)
             {
@@ -47,7 +48,7 @@ namespace Sylver.HandlerInvoker.Internal
 
             try
             {
-                object[] handlerActionParameters = PrepareParameters(args, handlerActionInvoker.HandlerExecutor);
+                object[] handlerActionParameters = PrepareParameters(scope, args, handlerActionInvoker.HandlerExecutor);
 
                 handlerResult = handlerActionInvoker.HandlerExecutor.Execute(targetHandler, handlerActionParameters);
             }
@@ -64,9 +65,36 @@ namespace Sylver.HandlerInvoker.Internal
         }
 
         /// <inheritdoc />
-        public Task InvokeAsync(object handlerAction, params object[] args)
+        public async Task InvokeAsync(IServiceScope scope, object handlerAction, params object[] args)
         {
-            throw new NotImplementedException();
+            HandlerActionInvokerCacheEntry handlerActionInvoker = _invokerCache.GetCachedHandlerAction(handlerAction);
+
+            if (handlerActionInvoker == null)
+            {
+                throw new HandlerActionNotFoundException(handlerAction);
+            }
+
+            var targetHandler = handlerActionInvoker.HandlerFactory(scope, handlerActionInvoker.HandlerType);
+
+            if (targetHandler == null)
+            {
+                throw new HandlerTargetCreationFailedException(handlerActionInvoker.HandlerType);
+            }
+
+            try
+            {
+                object[] handlerActionParameters = PrepareParameters(scope, args, handlerActionInvoker.HandlerExecutor);
+
+                await handlerActionInvoker.HandlerExecutor.ExecuteAsync(targetHandler, handlerActionParameters);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                handlerActionInvoker.HandlerReleaser(targetHandler);
+            }
         }
 
         /// <summary>
@@ -75,7 +103,7 @@ namespace Sylver.HandlerInvoker.Internal
         /// <param name="originalParameters">Original parameters.</param>
         /// <param name="executor">Handler executor.</param>
         /// <returns>Handler parameters.</returns>
-        private object[] PrepareParameters(object[] originalParameters, HandlerExecutor executor)
+        private object[] PrepareParameters(IServiceScope scope, object[] originalParameters, HandlerExecutor executor)
         {
             if (!executor.MethodParameters.Any())
             {
@@ -94,7 +122,7 @@ namespace Sylver.HandlerInvoker.Internal
 
                     if (!methodParameterInfo.ParameterType.IsAssignableFrom(originalObjectType))
                     {
-                        object transformedParameter = _parameterTransformer.Transform(originalParameters[i], methodParameterInfo.ParameterType.GetTypeInfo());
+                        object transformedParameter = _parameterTransformer.Transform(scope, originalParameters[i], methodParameterInfo.ParameterType.GetTypeInfo());
                         
                         parameters[i] = transformedParameter ?? executor.GetDefaultValueForParameter(i);
                     }

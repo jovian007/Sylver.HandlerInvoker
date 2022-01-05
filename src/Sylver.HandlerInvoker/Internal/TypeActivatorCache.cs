@@ -16,10 +16,10 @@ namespace Sylver.HandlerInvoker.Internal
         /// <summary>
         /// Creates an instance of <typeparamref name="TInstance"/>.
         /// </summary>
-        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> used to resolve dependencies for
+        /// <param name="scope">The <see cref="IServiceScope"/> used to resolve dependencies for
         /// <paramref name="optionType"/>.</param>
         /// <param name="optionType">The <see cref="Type"/> of the <typeparamref name="TInstance"/> to create.</param>
-        TInstance Create<TInstance>(IServiceProvider serviceProvider, Type implementationType) where TInstance : class;
+        TInstance Create<TInstance>(IServiceScope scope, Type implementationType) where TInstance : class;
     }
 
     /// <summary>
@@ -40,11 +40,11 @@ namespace Sylver.HandlerInvoker.Internal
         }
 
         /// <inheritdoc />
-        public TInstance Create<TInstance>(IServiceProvider serviceProvider, Type implementationType) where TInstance : class
+        public TInstance Create<TInstance>(IServiceScope scope, Type implementationType) where TInstance : class
         {
-            if (serviceProvider == null)
+            if (scope == null)
             {
-                throw new ArgumentNullException(nameof(serviceProvider));
+                throw new ArgumentNullException(nameof(scope));
             }
 
             if (implementationType == null)
@@ -54,7 +54,7 @@ namespace Sylver.HandlerInvoker.Internal
 
             ObjectFactory factory = _typeActivatorCache.GetOrAdd(implementationType, _createFactory);
 
-            return (TInstance)factory(serviceProvider, null);
+            return (TInstance)factory(scope.ServiceProvider, null);
         }
     }
 }

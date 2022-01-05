@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Sylver.HandlerInvoker.Internal
 {
@@ -12,7 +13,7 @@ namespace Sylver.HandlerInvoker.Internal
         /// <summary>
         /// Gets the handler factory creator used to create new handler instances.
         /// </summary>
-        public Func<Type, object> HandlerFactory { get; }
+        public Func<IServiceScope, Type, object> HandlerFactory { get; }
 
         /// <summary>
         /// Gets the handler releaser used to release handler's resources.
@@ -31,7 +32,7 @@ namespace Sylver.HandlerInvoker.Internal
         /// <param name="handlerFactory">Handler factory creator function.</param>
         /// <param name="handlerReleaser">Handler releaser action.</param>
         /// <param name="handlerExecutor">Handler action executor.</param>
-        internal HandlerActionInvokerCacheEntry(Type handlerType, Func<Type, object> handlerFactory, Action<object> handlerReleaser, HandlerExecutor handlerExecutor)
+        internal HandlerActionInvokerCacheEntry(Type handlerType, Func<IServiceScope, Type, object> handlerFactory, Action<object> handlerReleaser, HandlerExecutor handlerExecutor)
         {
             HandlerType = handlerType;
             HandlerFactory = handlerFactory;
