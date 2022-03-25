@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29025.244
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1090D96B-0997-42C1-A2D8-3CF5432154CD}"
 EndProject
@@ -16,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{1C87C7
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sylver.HandlerInvoker.Tests", "test\Sylver.HandlerInvoker.Tests\Sylver.HandlerInvoker.Tests.csproj", "{1712909E-67C3-4B83-8D0E-68D696E0B95B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sylver.HandlerInvoker", "src\Sylver.HandlerInvoker\Sylver.HandlerInvoker.csproj", "{E4C0A533-03A6-405B-B445-808A43773528}"
 EndProject
 Global
@@ -26,10 +24,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1712909E-67C3-4B83-8D0E-68D696E0B95B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1712909E-67C3-4B83-8D0E-68D696E0B95B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1712909E-67C3-4B83-8D0E-68D696E0B95B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1712909E-67C3-4B83-8D0E-68D696E0B95B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E4C0A533-03A6-405B-B445-808A43773528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E4C0A533-03A6-405B-B445-808A43773528}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4C0A533-03A6-405B-B445-808A43773528}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,7 +33,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{1712909E-67C3-4B83-8D0E-68D696E0B95B} = {E465EE41-6C93-45D6-B998-22D12CE48BB0}
 		{E4C0A533-03A6-405B-B445-808A43773528} = {1090D96B-0997-42C1-A2D8-3CF5432154CD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
