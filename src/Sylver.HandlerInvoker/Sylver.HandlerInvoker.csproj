@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Filipe GOMES PEIXOTO</Authors>
     <Description>Sylver.HandlerInvoker is a .NET Core library that provides a mechanism to invoke actions just like ASP.NET Core MVC controllers.</Description>
     <Copyright>Filipe GOMES PEIXOTO © 2019</Copyright>
